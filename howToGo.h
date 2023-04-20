@@ -1,13 +1,7 @@
 #ifndef JAK_DOJADE_HOWTOGO_H
 #define JAK_DOJADE_HOWTOGO_H
 
-#include "my-stl/stl_lib/vector.hxx"
-#include "my-stl/stl_lib/vstring.h"
-#include "my-stl/stl_lib/pair.hxx"
-
-using my_stl::pair;
-using my_stl::vstring;
-using my_stl::vector;
+#include "graph.h"
 
 class howToGo {
     int boardWidth;

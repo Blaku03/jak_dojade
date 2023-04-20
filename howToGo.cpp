@@ -3,10 +3,27 @@
 
 void howToGo::start() {
 
-    readBoard();
-//    readAirports();
-    parseBoard();
-    printCities();
+//    readBoard();
+////    readAirports();
+//    parseBoard();
+//    printCities();
+
+    //some random stuff just to test if graph works
+    graph test;
+    vstring temp_name("Warszawa");
+    test.addVertex(temp_name);
+    temp_name = "Krakow";
+    test.addVertex(temp_name);
+    temp_name = "Gdansk";
+    test.addVertex(temp_name);
+    vstring temp_name2("Krakow");
+    test.addEdge(temp_name, temp_name2, 100);
+    temp_name2 = "Warszawa";
+    test.addEdge(temp_name, temp_name2, 200);
+    temp_name = "Warszawa";
+    test.addEdge(temp_name, temp_name2, 300);
+
+    test.printGraph();
 }
 
 bool howToGo::isLetter(char character) {
