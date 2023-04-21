@@ -3,27 +3,14 @@
 
 void howToGo::start() {
 
-//    readBoard();
-////    readAirports();
-//    parseBoard();
+    readBoard();
+//    readAirports();
+    parseBoard();
+    traverseBoard();
 //    printCities();
+//    printBoard();
 
-    //some random stuff just to test if graph works
-    graph test;
-    vstring temp_name("Warszawa");
-    test.addVertex(temp_name);
-    temp_name = "Krakow";
-    test.addVertex(temp_name);
-    temp_name = "Gdansk";
-    test.addVertex(temp_name);
-    vstring temp_name2("Krakow");
-    test.addEdge(temp_name, temp_name2, 100);
-    temp_name2 = "Warszawa";
-    test.addEdge(temp_name, temp_name2, 200);
-    temp_name = "Warszawa";
-    test.addEdge(temp_name, temp_name2, 300);
-
-    test.printGraph();
+    graph.printGraph();
 }
 
 bool howToGo::isLetter(char character) {
@@ -51,6 +38,17 @@ void howToGo::printCities() {
     }
 }
 
+void howToGo::printBoard() {
+    std::cout << "\nBoard:\n";
+    for (int i = 0; i < boardHeight; i++) {
+        for (int j = 0; j < boardWidth; j++) {
+            std::cout << board[i][j];
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n";
+}
+
 void howToGo::readBoard() {
 
     std::cin >> boardWidth >> boardHeight;
@@ -76,12 +74,108 @@ void howToGo::parseBoard() {
     pair<int, int> coordinatesPosition{0, 0};
 
     for (; coordinatesPosition.first < boardHeight; coordinatesPosition.first++) {
-        for (; coordinatesPosition.second < boardWidth; coordinatesPosition.second++) {
+        for (coordinatesPosition.second = 0; coordinatesPosition.second < boardWidth; coordinatesPosition.second++) {
             if (isLetter(board[coordinatesPosition.first][coordinatesPosition.second])) {
                 getCity(coordinatesPosition);
             }
         }
-        coordinatesPosition.second = 0;
+
+    }
+}
+
+void howToGo::traverseBoard() {
+    pair<int, int> coordinatesPosition{0, 0};
+
+    vector<vector<char>> copyBoard = board;
+
+    for (; coordinatesPosition.first < boardHeight; coordinatesPosition.first++) {
+        for (coordinatesPosition.second = 0; coordinatesPosition.second < boardWidth; coordinatesPosition.second++) {
+            if (board[coordinatesPosition.first][coordinatesPosition.second] == '*') {
+                for (int i = 0; i < cities.size(); i++) {
+                    if (coordinatesPosition == cities[i].second) {
+                        bool isInVertex = false;
+                        for (int j = 0; j < graph.vertices.size(); j++) {
+                            if (graph.vertices[j].name == cities[i].first) {
+                                isInVertex = true;;
+                                break;
+                            }
+                        }
+                        if (!isInVertex) graph.addVertex(cities[i].first);
+                        goPath(coordinatesPosition, cities[i].first);
+                        board = copyBoard;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &startingCity) {
+    //first pair is coordinates, second is distance
+    LinkedList<pair<pair<int, int>, int>> path;
+    path.push_back(pair<pair<int, int>, int>(startingCoordinates, 0));
+    pair<int, int> currentCoordinates{};
+    int pathDistance = 0;
+
+    while (path.number_of_nodes > 0) {
+        currentCoordinates = path[0]->first;
+        pathDistance = path[0]->second;
+        path.pop_index(0);
+        board[currentCoordinates.first][currentCoordinates.second] = ' ';
+
+        //adding to the path if #
+        if (currentCoordinates.first - 1 >= 0) {
+            currentCoordinates.first--;
+            handleGraphTile(currentCoordinates, pathDistance, startingCity, path);
+            currentCoordinates.first++;
+        }
+        if (currentCoordinates.second - 1 >= 0) {
+            currentCoordinates.second--;
+            handleGraphTile(currentCoordinates, pathDistance, startingCity, path);
+            currentCoordinates.second++;
+        }
+        if (currentCoordinates.first + 1 < boardHeight) {
+            currentCoordinates.first++;
+            handleGraphTile(currentCoordinates, pathDistance, startingCity, path);
+            currentCoordinates.first--;
+        }
+        if (currentCoordinates.second + 1 < boardWidth) {
+            currentCoordinates.second++;
+            handleGraphTile(currentCoordinates, pathDistance, startingCity, path);
+            currentCoordinates.second--;
+        }
+    }
+}
+
+void
+howToGo::handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
+                         LinkedList<pair<pair<int, int>, int>> &path) {
+
+    if (board[currentCoordinates.first][currentCoordinates.second] == '#') {
+        path.push_back(pair<pair<int, int>, int>(currentCoordinates, currentDistance + 1));
+    } else if (board[currentCoordinates.first][currentCoordinates.second] == '*') {
+        addCityVertex(currentCoordinates, currentDistance, startingCity);
+    }
+}
+
+void
+howToGo::addCityVertex(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity) {
+    for (int i = 0; i < cities.size(); i++) {
+        if (currentCoordinates == cities[i].second) {
+            //todo DRY this
+            bool isInVertex = false;
+            for (int j = 0; j < graph.vertices.size(); j++) {
+                if (graph.vertices[j].name == cities[i].first) {
+                    isInVertex = true;;
+                    break;
+                }
+            }
+            if (!isInVertex) graph.addVertex(cities[i].first);
+            graph.addEdge(startingCity, cities[i].first, currentDistance);
+            break;
+        }
     }
 }
 

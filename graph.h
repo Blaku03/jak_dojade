@@ -36,7 +36,7 @@ public:
 
     vertex() = default;
 
-    explicit vertex(vstring &&name) : name(std::move(name)) {}
+    explicit vertex(vstring name) : name(std::move(name)) {}
 
     void addEdge(edge &newEdge);
 
@@ -46,10 +46,10 @@ public:
 
 class graph {
 
+public:
     vector<vertex> vertices;
 
-public:
-    void addVertex(vstring name);
+    void addVertex(const vstring &name);
 
     void addEdge(const vstring &source, const vstring &destination, int length);
 

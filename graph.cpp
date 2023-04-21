@@ -12,9 +12,9 @@ void vertex::printEdges() const {
     }
 }
 
-void graph::addVertex(vstring name) {
+void graph::addVertex(const vstring &name) {
 
-    vertex newVertex(std::move(name));
+    vertex newVertex(name);
 
     vertices.push_back(newVertex);
 }
