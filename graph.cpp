@@ -2,20 +2,13 @@
 
 void vertex::addEdge(edge &newEdge) {
 
-    edges.push(newEdge);
+    edges.push_back(newEdge);
 }
 
-void vertex::printEdges() {
-    edge tempEdge;
-    while (!edges.empty()) {
-        tempEdge = edges.top();
-        std::cout << tempEdge.destination->name << " " << tempEdge.length << " , ";
-        edges.pop();
+void vertex::printEdges() const {
+    for (int i = 0; i < edges.number_of_nodes; i++) {
+        std::cout << edges[i]->destination->name << " " << edges[i]->length << " , ";
     }
-}
-
-bool vertex::compareTwoEdges(const edge &firstEdge, const edge &secondEdge) {
-    return firstEdge.length < secondEdge.length;
 }
 
 void graph::addVertex(const vstring &name) {
@@ -47,4 +40,72 @@ void graph::printGraph() {
 
 void graph::findShortestPath(const vstring &startingCity, const vstring &destinationCity, int option) {
 
+    int startingCityIndex = hashMap.get(startingCity);
+    int destinationCityIndex = hashMap.get(destinationCity);
+
+    vertex *startingVertex = &vertices[startingCityIndex];
+    vertex *destinationVertex = &vertices[destinationCityIndex];
+
+    //index of vector is index of vertex, value int is distance to vertex
+    vector<int> distanceToVertex(vertices.size());
+
+    //index of vector is index of vertex, value int is previous vertex
+    vector<int> previousVertex(vertices.size());
+
+    for (int i = 0; i < vertices.size(); i++) {
+        distanceToVertex.push_back(INT_MAX);
+        previousVertex.push_back(-1);
+    }
+
+    distanceToVertex[startingCityIndex] = 0;
+
+    //first int is index of vertex, second int is distance to vertex
+    priorityQueue<pair<int, int>, bool (*)(const pair<int, int> &, const pair<int, int> &)> pq(
+            [](const pair<int, int> &a, const pair<int, int> &b) {
+                return a.second > b.second;
+            });
+
+    pq.push(pair<int, int>(startingCityIndex, 0));
+
+    while (!pq.empty()) {
+
+        pair<int, int> currentVertex = pq.top();
+        pq.pop();
+
+        for (int i = 0; i < vertices[currentVertex.first].edges.number_of_nodes; i++) {
+
+            int newDistance = distanceToVertex[currentVertex.first] + vertices[currentVertex.first].edges[i]->length;
+            int indexDestinationEdge = hashMap.get(vertices[currentVertex.first].edges[i]->destination->name);
+
+            if (newDistance < distanceToVertex[indexDestinationEdge]) {
+
+                distanceToVertex[indexDestinationEdge] = newDistance;
+                previousVertex[indexDestinationEdge] = currentVertex.first;
+
+                pq.push(pair<int, int>(indexDestinationEdge, newDistance));
+            }
+        }
+    }
+
+    if (option == 0) {
+        std::cout << distanceToVertex[destinationCityIndex] << "\n";
+        return;
+    }
+
+    std::cout << distanceToVertex[destinationCityIndex] << " ";
+
+    linkedList<int> originalPath;
+    //do backtrack from destination to starting city
+    int currentTraversalIndex = previousVertex[destinationCityIndex];
+    while (currentTraversalIndex != startingCityIndex) {
+        originalPath.push_front(currentTraversalIndex);
+        currentTraversalIndex = previousVertex[currentTraversalIndex];
+    }
+
+    //print original path
+    for (int i = 0; i < originalPath.number_of_nodes; i++) {
+        std::cout << vertices[*originalPath[i]].name << " ";
+    }
+
+    std::cout << "\n";
 }

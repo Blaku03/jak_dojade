@@ -11,7 +11,7 @@ void howToGo::start() {
 //    printCities();
 //    printBoard();
 
-    graph.printGraph();
+//    graph.printGraph();
 }
 
 bool howToGo::isLetter(char character) {
@@ -202,5 +202,14 @@ void howToGo::getCity(pair<int, int> &coordinates) {
 }
 
 void howToGo::findPaths() {
+    int numberOfPaths;
+    std::cin >> numberOfPaths;
+    int option;
 
+    for (int i = 0; i < numberOfPaths; i++) {
+        vstring startingCity, destinationCity;
+        std::cin >> startingCity >> destinationCity;
+        std::cin >> option;
+        graph.findShortestPath(startingCity, destinationCity, option);
+    }
 }

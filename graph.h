@@ -1,8 +1,6 @@
 #ifndef JAK_DOJADE_GRAPH_H
 #define JAK_DOJADE_GRAPH_H
 
-#include <utility>
-
 #include "my-stl/stl_lib/vector.hxx"
 #include "my-stl/stl_lib/pair.hxx"
 #include "my-stl/stl_lib/vstring.h"
@@ -33,18 +31,16 @@ public:
 class vertex {
 
 public:
-    static bool compareTwoEdges(const edge &firstEdge, const edge &secondEdge);
-
     vstring name;
-    priorityQueue<edge, bool (*)(const edge &, const edge &)> edges;
+    linkedList<edge> edges;
 
-    vertex() : edges(compareTwoEdges) {}
+    vertex() = default;
 
-    explicit vertex(vstring name) : name(std::move(name)), edges(compareTwoEdges) {}
+    explicit vertex(vstring name) : name(std::move(name)) {}
 
     void addEdge(edge &newEdge);
 
-    void printEdges();
+    void printEdges() const;
 
 };
 
