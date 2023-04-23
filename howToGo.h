@@ -18,6 +18,8 @@ class howToGo {
 
     void readAirports();
 
+    void findPaths();
+
     void parseBoard();
 
     void traverseBoard();
@@ -29,7 +31,8 @@ class howToGo {
     void addCityVertex(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity);
 
     void handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
-                         LinkedList<pair<pair<int, int>, int>> &path);
+                         linkedList<pair<pair<int, int>, int>> &path);
+
 
     void printCities();
 

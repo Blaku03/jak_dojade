@@ -2,14 +2,20 @@
 
 void vertex::addEdge(edge &newEdge) {
 
-    edges.push_back(newEdge);
+    edges.push(newEdge);
 }
 
-void vertex::printEdges() const {
-
-    for (int i = 0; i < edges.number_of_nodes; i++) {
-        std::cout << edges[i]->destination->name << " " << edges[i]->length << " , ";
+void vertex::printEdges() {
+    edge tempEdge;
+    while (!edges.empty()) {
+        tempEdge = edges.top();
+        std::cout << tempEdge.destination->name << " " << tempEdge.length << " , ";
+        edges.pop();
     }
+}
+
+bool vertex::compareTwoEdges(const edge &firstEdge, const edge &secondEdge) {
+    return firstEdge.length < secondEdge.length;
 }
 
 void graph::addVertex(const vstring &name) {
@@ -17,21 +23,15 @@ void graph::addVertex(const vstring &name) {
     vertex newVertex(name);
 
     vertices.push_back(newVertex);
+    hashMap.insert(name, (int) vertices.size() - 1);
 }
 
 void graph::addEdge(const vstring &source, const vstring &destination, int length) {
 
     edge newEdge;
     newEdge.length = length;
-
-    for (int i = 0; i < vertices.size(); i++) {
-        if (vertices[i].name == source) {
-            newEdge.source = &vertices[i];
-        }
-        if (vertices[i].name == destination) {
-            newEdge.destination = &vertices[i];
-        }
-    }
+    newEdge.source = &vertices[hashMap.get(source)];
+    newEdge.destination = &vertices[hashMap.get(destination)];
 
     newEdge.source->addEdge(newEdge);
 }
@@ -43,4 +43,8 @@ void graph::printGraph() {
         vertices[i].printEdges();
         std::cout << "\n";
     }
+}
+
+void graph::findShortestPath(const vstring &startingCity, const vstring &destinationCity, int option) {
+
 }

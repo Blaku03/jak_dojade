@@ -6,12 +6,14 @@
 #include "my-stl/stl_lib/vector.hxx"
 #include "my-stl/stl_lib/pair.hxx"
 #include "my-stl/stl_lib/vstring.h"
-#include "my-stl/stl_lib/LinkedList.hxx"
+#include "my-stl/stl_lib/linkedList.hxx"
+#include "my-stl/stl_lib/hashMap.h"
+#include "my-stl/stl_lib/priorityQueue.hxx"
 
 using my_stl::vector;
 using my_stl::pair;
 using my_stl::vstring;
-using my_stl::LinkedList;
+using my_stl::linkedList;
 
 class vertex;
 
@@ -31,16 +33,18 @@ public:
 class vertex {
 
 public:
+    static bool compareTwoEdges(const edge &firstEdge, const edge &secondEdge);
+
     vstring name;
-    LinkedList<edge> edges;
+    priorityQueue<edge, bool (*)(const edge &, const edge &)> edges;
 
-    vertex() = default;
+    vertex() : edges(compareTwoEdges) {}
 
-    explicit vertex(vstring name) : name(std::move(name)) {}
+    explicit vertex(vstring name) : name(std::move(name)), edges(compareTwoEdges) {}
 
     void addEdge(edge &newEdge);
 
-    void printEdges() const;
+    void printEdges();
 
 };
 
@@ -49,9 +53,13 @@ class graph {
 public:
     vector<vertex> vertices;
 
+    hashMap hashMap;
+
     void addVertex(const vstring &name);
 
     void addEdge(const vstring &source, const vstring &destination, int length);
+
+    void findShortestPath(const vstring &startingCity, const vstring &destinationCity, int option);
 
     void printGraph();
 

@@ -4,9 +4,10 @@
 void howToGo::start() {
 
     readBoard();
-//    readAirports();
     parseBoard();
     traverseBoard();
+    readAirports();
+    findPaths();
 //    printCities();
 //    printBoard();
 
@@ -57,7 +58,10 @@ void howToGo::readBoard() {
 
     for (int i = 0; i < boardHeight; ++i) {
         for (int j = 0; j < boardWidth; ++j) {
-            std::cin >> temp;
+            temp = (char) getchar();
+            while (temp == '\n') {
+                temp = (char) getchar();
+            }
             rowData.push_back(temp);
         }
         board.push_back(rowData);
@@ -68,6 +72,15 @@ void howToGo::readBoard() {
 void howToGo::readAirports() {
     int numberOfAirports;
     std::cin >> numberOfAirports;
+
+    vstring airportNameDestination, airportNameSource;
+    int length;
+
+    for (int i = 0; i < numberOfAirports; i++) {
+        std::cin >> airportNameSource >> airportNameDestination;
+        std::cin >> length;
+        graph.addEdge(airportNameSource, airportNameDestination, length);
+    }
 }
 
 void howToGo::parseBoard() {
@@ -93,13 +106,7 @@ void howToGo::traverseBoard() {
             if (board[coordinatesPosition.first][coordinatesPosition.second] == '*') {
                 for (int i = 0; i < cities.size(); i++) {
                     if (coordinatesPosition == cities[i].second) {
-                        bool isInVertex = false;
-                        for (int j = 0; j < graph.vertices.size(); j++) {
-                            if (graph.vertices[j].name == cities[i].first) {
-                                isInVertex = true;;
-                                break;
-                            }
-                        }
+                        bool isInVertex = graph.hashMap.contains(cities[i].first);
                         if (!isInVertex) graph.addVertex(cities[i].first);
                         goPath(coordinatesPosition, cities[i].first);
                         board = copyBoard;
@@ -114,7 +121,7 @@ void howToGo::traverseBoard() {
 
 void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &startingCity) {
     //first pair is coordinates, second is distance
-    LinkedList<pair<pair<int, int>, int>> path;
+    linkedList<pair<pair<int, int>, int>> path;
     path.push_back(pair<pair<int, int>, int>(startingCoordinates, 0));
     pair<int, int> currentCoordinates{};
     int pathDistance = 0;
@@ -124,6 +131,7 @@ void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &s
         pathDistance = path[0]->second;
         path.pop_index(0);
         board[currentCoordinates.first][currentCoordinates.second] = ' ';
+//        printBoard();
 
         //adding to the path if #
         if (currentCoordinates.first - 1 >= 0) {
@@ -151,12 +159,12 @@ void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &s
 
 void
 howToGo::handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
-                         LinkedList<pair<pair<int, int>, int>> &path) {
+                         linkedList<pair<pair<int, int>, int>> &path) {
 
     if (board[currentCoordinates.first][currentCoordinates.second] == '#') {
         path.push_back(pair<pair<int, int>, int>(currentCoordinates, currentDistance + 1));
     } else if (board[currentCoordinates.first][currentCoordinates.second] == '*') {
-        addCityVertex(currentCoordinates, currentDistance, startingCity);
+        addCityVertex(currentCoordinates, currentDistance + 1, startingCity);
     }
 }
 
@@ -164,14 +172,7 @@ void
 howToGo::addCityVertex(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity) {
     for (int i = 0; i < cities.size(); i++) {
         if (currentCoordinates == cities[i].second) {
-            //todo DRY this
-            bool isInVertex = false;
-            for (int j = 0; j < graph.vertices.size(); j++) {
-                if (graph.vertices[j].name == cities[i].first) {
-                    isInVertex = true;;
-                    break;
-                }
-            }
+            bool isInVertex = graph.hashMap.contains(cities[i].first);
             if (!isInVertex) graph.addVertex(cities[i].first);
             graph.addEdge(startingCity, cities[i].first, currentDistance);
             break;
@@ -197,5 +198,9 @@ void howToGo::getCity(pair<int, int> &coordinates) {
     checkForStar(positionOfCity);
 
     cities.push_back(pair<vstring, pair<int, int>>(readCity, positionOfCity));
+
+}
+
+void howToGo::findPaths() {
 
 }
