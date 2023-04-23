@@ -58,10 +58,11 @@ void howToGo::readBoard() {
 
     for (int i = 0; i < boardHeight; ++i) {
         for (int j = 0; j < boardWidth; ++j) {
-            temp = (char) getchar();
-            while (temp == '\n') {
-                temp = (char) getchar();
-            }
+//            temp = (char) getchar();
+//            if (temp == '\n') {
+//                temp = (char) getchar();
+//            }
+            std::cin >> temp;
             rowData.push_back(temp);
         }
         board.push_back(rowData);

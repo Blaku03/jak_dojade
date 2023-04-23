@@ -93,6 +93,10 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
     }
 
     std::cout << distanceToVertex[destinationCityIndex] << " ";
+    if (distanceToVertex[destinationCityIndex] == 0) {
+        std::cout << "\n";
+        return;
+    }
 
     linkedList<int> originalPath;
     //do backtrack from destination to starting city

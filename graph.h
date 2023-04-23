@@ -1,12 +1,12 @@
 #ifndef JAK_DOJADE_GRAPH_H
 #define JAK_DOJADE_GRAPH_H
 
-#include "my-stl/stl_lib/vector.hxx"
-#include "my-stl/stl_lib/pair.hxx"
-#include "my-stl/stl_lib/vstring.h"
-#include "my-stl/stl_lib/linkedList.hxx"
-#include "my-stl/stl_lib/hashMap.h"
-#include "my-stl/stl_lib/priorityQueue.hxx"
+#include "vector.hxx"
+#include "pair.hxx"
+#include "vstring.h"
+#include "linkedList.hxx"
+#include "hashMap.h"
+#include "priorityQueue.hxx"
 
 using my_stl::vector;
 using my_stl::pair;
