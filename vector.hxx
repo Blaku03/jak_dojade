@@ -253,7 +253,7 @@ my_stl::vector<T> &my_stl::vector<T>::operator+=(vector &&user_vector) {
 }
 
 template<typename T>
-bool my_stl::vector<T>::operator==(const vector &vector_to_compare) {
+bool my_stl::vector<T>::operator==(const vector &vector_to_compare) const {
     if (number_of_elements != vector_to_compare.number_of_elements) return false;
 
     for (int i = 0; i < number_of_elements; i++) {

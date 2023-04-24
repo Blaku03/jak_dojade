@@ -74,7 +74,7 @@ namespace my_stl {
 
         vector &operator+=(vector &&user_vector);
 
-        bool operator==(const vector &vector_to_compare);
+        bool operator==(const vector &vector_to_compare) const;
 
         [[nodiscard]] size_t size() const;
 

@@ -15,7 +15,8 @@ void howToGo::start() {
 }
 
 bool howToGo::isLetter(char character) {
-    return (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z');
+    return (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') ||
+           (character >= '0' && character <= '9');
 }
 
 bool howToGo::checkForStar(pair<int, int> &startingCoordinates) {
@@ -58,9 +59,9 @@ void howToGo::readBoard() {
 
     for (int i = 0; i < boardHeight; ++i) {
         for (int j = 0; j < boardWidth; ++j) {
-//            temp = (char) getchar();
-//            if (temp == '\n') {
-//                temp = (char) getchar();
+//            temp = getchar();
+//            while (temp == '\n') {
+//                temp = getchar();
 //            }
             std::cin >> temp;
             rowData.push_back(temp);
@@ -122,15 +123,16 @@ void howToGo::traverseBoard() {
 
 void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &startingCity) {
     //first pair is coordinates, second is distance
-    linkedList<pair<pair<int, int>, int>> path;
-    path.push_back(pair<pair<int, int>, int>(startingCoordinates, 0));
+    priorityQueue<pair<pair<int, int>, int>, compare> path;
+    path.push(pair<pair<int, int>, int>(startingCoordinates, 0));
     pair<int, int> currentCoordinates{};
     int pathDistance = 0;
 
-    while (path.number_of_nodes > 0) {
-        currentCoordinates = path[0]->first;
-        pathDistance = path[0]->second;
-        path.pop_index(0);
+
+    while (!path.empty()) {
+        currentCoordinates = path.top().first;
+        pathDistance = path.top().second;
+        path.pop();
         board[currentCoordinates.first][currentCoordinates.second] = ' ';
 //        printBoard();
 
@@ -160,12 +162,14 @@ void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &s
 
 void
 howToGo::handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
-                         linkedList<pair<pair<int, int>, int>> &path) {
+                         priorityQueue<pair<pair<int, int>, int>, compare> &path) {
 
     if (board[currentCoordinates.first][currentCoordinates.second] == '#') {
-        path.push_back(pair<pair<int, int>, int>(currentCoordinates, currentDistance + 1));
+        path.push(pair<pair<int, int>, int>(currentCoordinates, currentDistance + 1));
+        board[currentCoordinates.first][currentCoordinates.second] = ' ';
     } else if (board[currentCoordinates.first][currentCoordinates.second] == '*') {
         addCityVertex(currentCoordinates, currentDistance + 1, startingCity);
+        board[currentCoordinates.first][currentCoordinates.second] = ' ';
     }
 }
 
@@ -173,9 +177,14 @@ void
 howToGo::addCityVertex(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity) {
     for (int i = 0; i < cities.size(); i++) {
         if (currentCoordinates == cities[i].second) {
-            bool isInVertex = graph.hashMap.contains(cities[i].first);
-            if (!isInVertex) graph.addVertex(cities[i].first);
+            if (cities[i].first == "AC1") {
+
+            }
+            if (!graph.hashMap.contains(cities[i].first)) graph.addVertex(cities[i].first);
+            if (cities[i].first == static_cast<const vstring &>(startingCity)) continue;
+            if (!graph.hashMap.contains(startingCity)) graph.addVertex(startingCity);
             graph.addEdge(startingCity, cities[i].first, currentDistance);
+            graph.addEdge(cities[i].first, startingCity, currentDistance);
             break;
         }
     }

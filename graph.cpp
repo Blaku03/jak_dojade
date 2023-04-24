@@ -21,9 +21,19 @@ void graph::addVertex(const vstring &name) {
 
 void graph::addEdge(const vstring &source, const vstring &destination, int length) {
 
+    int sourceIndex = hashMap.get(source);
+    for (int i = 0; i < vertices[sourceIndex].edges.number_of_nodes; i++) {
+        if (vertices[sourceIndex].edges[i]->destination->name == destination) {
+            if (vertices[sourceIndex].edges[i]->length > length) {
+                vertices[sourceIndex].edges[i]->length = length;
+            }
+            return;
+        }
+    }
+
     edge newEdge;
     newEdge.length = length;
-    newEdge.source = &vertices[hashMap.get(source)];
+    newEdge.source = &vertices[sourceIndex];
     newEdge.destination = &vertices[hashMap.get(destination)];
 
     newEdge.source->addEdge(newEdge);

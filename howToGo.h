@@ -30,8 +30,14 @@ class howToGo {
 
     void addCityVertex(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity);
 
+    struct compare {
+        bool operator()(const pair<pair<int, int>, int> &a, const pair<pair<int, int>, int> &b) {
+            return a.second < b.second;
+        }
+    };
+
     void handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
-                         linkedList<pair<pair<int, int>, int>> &path);
+                         priorityQueue<pair<pair<int, int>, int>, compare> &path);
 
 
     void printCities();
