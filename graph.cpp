@@ -21,19 +21,9 @@ void graph::addVertex(const vstring &name) {
 
 void graph::addEdge(const vstring &source, const vstring &destination, int length) {
 
-    int sourceIndex = hashMap.get(source);
-    for (int i = 0; i < vertices[sourceIndex].edges.number_of_nodes; i++) {
-        if (vertices[sourceIndex].edges[i]->destination->name == destination) {
-            if (vertices[sourceIndex].edges[i]->length > length) {
-                vertices[sourceIndex].edges[i]->length = length;
-            }
-            return;
-        }
-    }
-
     edge newEdge;
     newEdge.length = length;
-    newEdge.source = &vertices[sourceIndex];
+    newEdge.source = &vertices[hashMap.get(source)];
     newEdge.destination = &vertices[hashMap.get(destination)];
 
     newEdge.source->addEdge(newEdge);
@@ -72,7 +62,7 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
     //first int is index of vertex, second int is distance to vertex
     priorityQueue<pair<int, int>, bool (*)(const pair<int, int> &, const pair<int, int> &)> pq(
             [](const pair<int, int> &a, const pair<int, int> &b) {
-                return a.second > b.second;
+                return a.second < b.second;
             });
 
     pq.push(pair<int, int>(startingCityIndex, 0));
@@ -81,6 +71,8 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
 
         pair<int, int> currentVertex = pq.top();
         pq.pop();
+
+        if (currentVertex.first == destinationCityIndex) break;
 
         for (int i = 0; i < vertices[currentVertex.first].edges.number_of_nodes; i++) {
 
@@ -95,6 +87,7 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
                 pq.push(pair<int, int>(indexDestinationEdge, newDistance));
             }
         }
+
     }
 
     if (option == 0) {
@@ -108,17 +101,18 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
         return;
     }
 
-    linkedList<int> originalPath;
+    vector<int> originalPath;
     //do backtrack from destination to starting city
     int currentTraversalIndex = previousVertex[destinationCityIndex];
     while (currentTraversalIndex != startingCityIndex) {
-        originalPath.push_front(currentTraversalIndex);
+        originalPath.push_back(currentTraversalIndex);
         currentTraversalIndex = previousVertex[currentTraversalIndex];
     }
 
     //print original path
-    for (int i = 0; i < originalPath.number_of_nodes; i++) {
-        std::cout << vertices[*originalPath[i]].name << " ";
+    for (int i = (int) originalPath.size() - 1; i >= 0; i--) {
+        std::cout << vertices[originalPath[i]].name << " ";
+//        printf("%s ", vertices[*originalPath[i]].name.main_buffer);
     }
 
     std::cout << "\n";

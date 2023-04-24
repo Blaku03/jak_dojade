@@ -7,12 +7,10 @@ class howToGo {
     int boardWidth;
     int boardHeight;
     vector<vector<char>> board;
-    vector<pair<vstring, pair<int, int>>> cities;
+    bool *visitedTiles;
     graph graph;
 
     static bool isLetter(char character);
-
-    bool checkForStar(pair<int, int> &startingCoordinates);
 
     void readBoard();
 
@@ -26,9 +24,9 @@ class howToGo {
 
     void goPath(const pair<int, int> &startingCoordinates, const vstring &startingCity);
 
-    void getCity(pair<int, int> &coordinates);
+    vstring &getCity(const pair<int, int> &coordinates);
 
-    void addCityVertex(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity);
+    void addCityVertex(int currentDistance, const vstring &startingCity, const vstring &destinationCity);
 
     struct compare {
         bool operator()(const pair<pair<int, int>, int> &a, const pair<pair<int, int>, int> &b) {
@@ -39,8 +37,6 @@ class howToGo {
     void handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
                          priorityQueue<pair<pair<int, int>, int>, compare> &path);
 
-
-    void printCities();
 
     void printBoard();
 

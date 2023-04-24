@@ -16,6 +16,8 @@ namespace my_stl {
 
         vstring &add_ms(const char *user_char);
 
+        void add_fgets(const char *read_fget);
+
         void remove_last_char();
 
         void remove_white_space_end();

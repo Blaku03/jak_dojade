@@ -12,6 +12,7 @@ int main() {
     //rzeczy do przyspieszenia
     //pierwsza droga jest najszybsza
     //uzywanie fgets zamiast cin do lotnisk
+    //mapa bool zamiast char
 
     return 0;
 }

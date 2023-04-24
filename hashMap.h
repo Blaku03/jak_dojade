@@ -13,7 +13,7 @@ using my_stl::pair;
 
 class hashMap {
 
-    int sizeOfTable = 1'000'000'0;
+    int sizeOfTable = 100'000;
     unsigned int numberOfElements = 0;
     vector<linkedList<pair<vstring, int>>> mainTable;
 

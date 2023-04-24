@@ -72,13 +72,27 @@ my_stl::vstring &my_stl::vstring::operator+=(const char *user_char) {
     return *this;
 }
 
+void my_stl::vstring::add_fgets(const char *read_fget) {
+    int element = 0;
+
+    while (read_fget[element] != '\0' && read_fget[element] != '\n' && read_fget[element] != ' ') {
+        if (number_of_elements >= current_size - 1)
+            expand_twice_the_size();
+        *(main_buffer + number_of_elements) = read_fget[element];
+        element++;
+        number_of_elements++;
+    }
+
+    *(main_buffer + number_of_elements) = '\0';
+}
+
 namespace my_stl {
     std::istream &operator>>(std::istream &is, my_stl::vstring &vstring) {
         char user_input[1024];
-        std::cin >> user_input;
+        scanf("%s", user_input);
         vstring.clear();
 
-        vstring.add_ms(user_input);
+        vstring.add_fgets(user_input);
 
         return is;
     }
