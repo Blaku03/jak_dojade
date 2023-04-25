@@ -3,10 +3,26 @@
 
 #include "graph.h"
 
+struct tile {
+    int first;
+    int second;
+    int distance;
+
+    tile(int first, int second, int distance) : first(first), second(second), distance(distance) {}
+
+    tile() = default;
+};
+
+struct compare {
+    bool operator()(const tile &a, const tile &b) {
+        return a.distance < b.distance;
+    }
+};
+
+
 class howToGo {
     int boardWidth;
     int boardHeight;
-//    vector<vector<char>> board;
     char *board;
     bool *visitedTiles;
     graph graph;
@@ -19,24 +35,19 @@ class howToGo {
 
     void findPaths();
 
-    void parseBoard();
-
     void traverseBoard();
 
     void goPath(const pair<int, int> &startingCoordinates, const vstring &startingCity);
 
-    vstring &getCity(const pair<int, int> &coordinates);
+    bool checkIfAnyPathExists(const pair<int, int> &startingCoordinates);
+
+    vstring *getCity(const pair<int, int> &coordinates);
 
     void addCityVertex(int currentDistance, const vstring &startingCity, const vstring &destinationCity);
 
-    struct compare {
-        bool operator()(const pair<pair<int, int>, int> &a, const pair<pair<int, int>, int> &b) {
-            return a.second < b.second;
-        }
-    };
 
     void handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
-                         priorityQueue<pair<pair<int, int>, int>, compare> &path);
+                         priorityQueue<tile, compare> &path);
 
 
     void printBoard();

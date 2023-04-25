@@ -1,14 +1,14 @@
 #ifndef JAK_DOJADE_GRAPH_H
 #define JAK_DOJADE_GRAPH_H
 
-#include "vector.hxx"
+//#include "vector.hxx"
+#include <vector>
 #include "pair.hxx"
 #include "vstring.h"
 #include "linkedList.hxx"
 #include "hashMap.h"
 #include "priorityQueue.hxx"
 
-using my_stl::vector;
 using my_stl::pair;
 using my_stl::vstring;
 using my_stl::linkedList;
@@ -32,7 +32,7 @@ class vertex {
 
 public:
     vstring name;
-    linkedList<edge> edges;
+    vector<edge> edges;
 
     vertex() = default;
 

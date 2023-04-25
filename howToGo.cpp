@@ -1,5 +1,6 @@
 #include "howToGo.h"
 #include <iostream>
+#include <cstring>
 
 void howToGo::start() {
 
@@ -27,17 +28,17 @@ void howToGo::start() {
 //    std::cout << "Finding paths:";
 //    end = std::chrono::steady_clock::now();
 //    std::cout << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
+//    printCities();
+//    printBoard();
+
+//    graph.printGraph();
 
 //main
     readBoard();
-//    traverseBoard();
+    traverseBoard();
 //    readAirports();
 //    findPaths();
 
-//    printCities();
-    printBoard();
-
-//    graph.printGraph();
 }
 
 bool howToGo::isLetter(char character) {
@@ -93,37 +94,80 @@ void howToGo::traverseBoard() {
     pair<int, int> coordinatesPosition{0, 0};
 
     //make double char board instead of vector char board
-    visitedTiles = new bool[boardHeight * boardWidth];
-    memset(visitedTiles, false, boardHeight * boardWidth);
+    visitedTiles = new bool[boardHeight * boardWidth + 1];
 
-    vstring foundCity;
+//    memset(visitedTiles, false, boardHeight * boardWidth);
 
-    for (; coordinatesPosition.first < boardHeight; coordinatesPosition.first++) {
-        for (coordinatesPosition.second = 0; coordinatesPosition.second < boardWidth; coordinatesPosition.second++) {
-            if (board[coordinatesPosition.first * boardWidth + coordinatesPosition.second] == '*') {
-                foundCity = getCity(coordinatesPosition);
-                if (!graph.hashMap.contains(foundCity)) graph.addVertex(foundCity);
-                goPath(coordinatesPosition, foundCity);
-                memset(visitedTiles, false, boardHeight * boardWidth);
-            }
+    vstring *foundCity;
+//    long long totalTimeCity = 0;
+//    long long totalTimeAddVertex = 0;
+//    long long totalTimeGoPath = 0;
+    for (int i = 0; i < boardHeight; i++) {
+        for (int j = 0; j < boardWidth; j++) {
+            memset(visitedTiles, false, boardHeight * boardWidth);
         }
     }
+
+//    for (; coordinatesPosition.first < boardHeight; ++coordinatesPosition.first) {
+//        for (coordinatesPosition.second = 0; coordinatesPosition.second < boardWidth; ++coordinatesPosition.second) {
+//            if (board[coordinatesPosition.first * boardWidth + coordinatesPosition.second] == '*') {
+//                //time each of the following
+////                auto start = std::chrono::steady_clock::now();
+////                foundCity = getCity(coordinatesPosition);
+////                auto end = std::chrono::steady_clock::now();
+////                totalTimeCity += std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+//
+////                start = std::chrono::steady_clock::now();
+////                graph.addVertex(*foundCity);
+////                end = std::chrono::steady_clock::now();
+////                totalTimeAddVertex += std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+//
+////                start = std::chrono::steady_clock::now();
+////                goPath(coordinatesPosition, *foundCity);
+////                end = std::chrono::steady_clock::now();
+////                totalTimeGoPath += std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+//
+//                std::memset(visitedTiles, false, boardWidth * boardHeight);
+//            }
+//        }
+//    }
+
+//    std::cout << "Total time city: " << totalTimeCity << "ms\n";
+//    std::cout << "Total time add vertex: " << totalTimeAddVertex << "ms\n";
+//    std::cout << "Total time go path: " << totalTimeGoPath << "ms\n";
+
 
     delete visitedTiles;
 
 }
 
+bool howToGo::checkIfAnyPathExists(const pair<int, int> &startingCoordinates) {
+    if (startingCoordinates.first - 1 >= 0) {
+        if (board[(startingCoordinates.first - 1) * boardWidth + startingCoordinates.second] == '#') return true;
+    }
+    if (startingCoordinates.first + 1 < boardHeight) {
+        if (board[(startingCoordinates.first + 1) * boardWidth + startingCoordinates.second] == '#') return true;
+    }
+    if (startingCoordinates.second - 1 >= 0) {
+        if (board[startingCoordinates.first * boardWidth + startingCoordinates.second - 1] == '#') return true;
+    }
+    if (startingCoordinates.second + 1 < boardWidth) {
+        if (board[startingCoordinates.first * boardWidth + startingCoordinates.second + 1] == '#') return true;
+    }
+    return false;
+}
+
 void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &startingCity) {
+    if (!checkIfAnyPathExists(startingCoordinates)) return;
     //first pair is coordinates, second is distance
-    priorityQueue<pair<pair<int, int>, int>, compare> path;
-    path.push(pair<pair<int, int>, int>(startingCoordinates, 0));
+    priorityQueue<tile, compare> path;
+    path.push(tile(startingCoordinates.first, startingCoordinates.second, 0));
     pair<int, int> currentCoordinates{};
     int pathDistance = 0;
 
-
     while (!path.empty()) {
-        currentCoordinates = path.top().first;
-        pathDistance = path.top().second;
+        currentCoordinates = pair<int, int>(path.top().first, path.top().second);
+        pathDistance = path.top().distance;
         path.pop();
         visitedTiles[currentCoordinates.first * boardWidth + currentCoordinates.second] = true;
 //        printBoard();
@@ -154,26 +198,25 @@ void howToGo::goPath(const pair<int, int> &startingCoordinates, const vstring &s
 
 void
 howToGo::handleGraphTile(const pair<int, int> &currentCoordinates, int currentDistance, const vstring &startingCity,
-                         priorityQueue<pair<pair<int, int>, int>, compare> &path) {
+                         priorityQueue<tile, compare> &path) {
 
     if (visitedTiles[currentCoordinates.first * boardWidth + currentCoordinates.second]) return;
     if (board[currentCoordinates.first * boardWidth + currentCoordinates.second] == '#') {
-        path.push(pair<pair<int, int>, int>(currentCoordinates, currentDistance + 1));
+        path.push(tile(currentCoordinates.first, currentCoordinates.second, currentDistance + 1));
         visitedTiles[currentCoordinates.first * boardWidth + currentCoordinates.second] = true;
     } else if (board[currentCoordinates.first * boardWidth + currentCoordinates.second] == '*') {
-        addCityVertex(currentDistance + 1, startingCity, getCity(currentCoordinates));
+        addCityVertex(currentDistance + 1, startingCity, *getCity(currentCoordinates));
         visitedTiles[currentCoordinates.first * boardWidth + currentCoordinates.second] = true;
     }
 }
 
 void
 howToGo::addCityVertex(int currentDistance, const vstring &startingCity, const vstring &destinationCity) {
-    if (!graph.hashMap.contains(destinationCity)) graph.addVertex(destinationCity);
+    graph.addVertex(destinationCity);
     graph.addEdge(startingCity, destinationCity, currentDistance);
-//    graph.addEdge(destinationCity, startingCity, currentDistance);
 }
 
-vstring &howToGo::getCity(const pair<int, int> &coordinates) {
+vstring *howToGo::getCity(const pair<int, int> &coordinates) {
 
     auto *city = new vstring();
     //check from top left corner to bottom right corner in range of 3x3
@@ -193,11 +236,11 @@ vstring &howToGo::getCity(const pair<int, int> &coordinates) {
                     city->push_back(board[(coordinates.first + dy) * boardWidth + coordinates.second + dx + offset]);
                     offset++;
                 }
-                return *city;
+                return city;
             }
         }
     }
-    return *city;
+    return city;
 }
 
 void howToGo::findPaths() {
