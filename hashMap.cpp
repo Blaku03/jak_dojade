@@ -12,12 +12,27 @@ unsigned int hashMap::hash(vstring key) const {
     return hash % sizeOfTable;
 }
 
-void hashMap::insert(const vstring &key, int value) {
-    numberOfElements++;
+//void hashMap::insert(const vstring &key, int value) {
+//    numberOfElements++;
+//    unsigned int index = hash(key);
+//
+//    pair<vstring, int> newPair(key, value);
+//    mainTable.i_element(index, true).push_back(newPair);
+//}
+
+bool hashMap::insertIfNotExists(const my_stl::vstring &key, int value) {
     unsigned int index = hash(key);
 
+    for (int i = 0; i < mainTable.i_element(index, true).number_of_nodes; i++) {
+        if (mainTable.i_element(index, true)[i]->first == key) {
+            return false;
+        }
+    }
+
+    numberOfElements++;
     pair<vstring, int> newPair(key, value);
     mainTable.i_element(index, true).push_back(newPair);
+    return true;
 }
 
 int hashMap::get(const vstring &key) {
@@ -43,18 +58,6 @@ void hashMap::remove(const vstring &key) {
             return;
         }
     }
-}
-
-bool hashMap::contains(const vstring &key) {
-    unsigned int index = hash(key);
-
-    for (int i = 0; i < mainTable.i_element(index, true).number_of_nodes; i++) {
-        if (mainTable.i_element(index, true)[i]->first == key) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 unsigned int hashMap::size() const {

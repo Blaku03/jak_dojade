@@ -14,7 +14,7 @@ T *my_stl::vector<T>::copy_array(T *pointer_to_array_that_should_be_copied, size
     T *copied_array = new T[double_size ? size_of_array * 2 : size_of_array];
 
     for (unsigned int i = 0; i < size_of_array; i++) {
-        *(copied_array + i) = *(pointer_to_array_that_should_be_copied + i);
+        *(copied_array + i) = std::move(*(pointer_to_array_that_should_be_copied + i));
     }
 
     return copied_array;

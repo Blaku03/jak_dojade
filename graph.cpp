@@ -6,17 +6,18 @@ void vertex::addEdge(edge &newEdge) {
 }
 
 void vertex::printEdges() const {
-    for (int i = 0; i < edges.number_of_nodes; i++) {
-        std::cout << edges[i]->destination->name << " " << edges[i]->length << " , ";
+    for (int i = 0; i < edges.size(); i++) {
+        std::cout << edges[i].destination->name << " " << edges[i].length << " , ";
     }
 }
 
-void graph::addVertex(const vstring &name) {
+void graph::addVertex(vstring name) {
+
+    if (!hashMap.insertIfNotExists(name, (int) vertices.size())) return;
 
     vertex newVertex(name);
 
     vertices.push_back(newVertex);
-    hashMap.insert(name, (int) vertices.size() - 1);
 }
 
 void graph::addEdge(const vstring &source, const vstring &destination, int length) {
@@ -43,9 +44,6 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
     int startingCityIndex = hashMap.get(startingCity);
     int destinationCityIndex = hashMap.get(destinationCity);
 
-    vertex *startingVertex = &vertices[startingCityIndex];
-    vertex *destinationVertex = &vertices[destinationCityIndex];
-
     //index of vector is index of vertex, value int is distance to vertex
     vector<int> distanceToVertex(vertices.size());
 
@@ -67,17 +65,20 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
 
     pq.push(pair<int, int>(startingCityIndex, 0));
 
+    int approxNumberOfEdges = 0;
+
     while (!pq.empty()) {
 
+        approxNumberOfEdges++;
         pair<int, int> currentVertex = pq.top();
         pq.pop();
 
         if (currentVertex.first == destinationCityIndex) break;
 
-        for (int i = 0; i < vertices[currentVertex.first].edges.number_of_nodes; i++) {
+        for (int i = 0; i < vertices[currentVertex.first].edges.size(); i++) {
 
-            int newDistance = distanceToVertex[currentVertex.first] + vertices[currentVertex.first].edges[i]->length;
-            int indexDestinationEdge = hashMap.get(vertices[currentVertex.first].edges[i]->destination->name);
+            int newDistance = distanceToVertex[currentVertex.first] + vertices[currentVertex.first].edges[i].length;
+            int indexDestinationEdge = hashMap.get(vertices[currentVertex.first].edges[i].destination->name);
 
             if (newDistance < distanceToVertex[indexDestinationEdge]) {
 
@@ -102,7 +103,7 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
     }
 
 
-    vector<int> originalPath;
+    vector<int> originalPath(approxNumberOfEdges);
     //do backtrack from destination to starting city
     int currentTraversalIndex = previousVertex[destinationCityIndex];
     while (currentTraversalIndex != startingCityIndex) {
@@ -111,10 +112,8 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
     }
 
 //    return;
-    //print original path
     for (int i = (int) originalPath.size() - 1; i >= 0; i--) {
         std::cout << vertices[originalPath[i]].name << " ";
-//        printf("%s ", vertices[*originalPath[i]].name.main_buffer);
     }
 
     std::cout << "\n";

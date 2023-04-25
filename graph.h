@@ -32,7 +32,7 @@ class vertex {
 
 public:
     vstring name;
-    linkedList<edge> edges;
+    vector<edge> edges;
 
     vertex() = default;
 
@@ -51,7 +51,7 @@ public:
 
     hashMap hashMap;
 
-    void addVertex(const vstring &name);
+    void addVertex(vstring name);
 
     void addEdge(const vstring &source, const vstring &destination, int length);
 
