@@ -6,7 +6,8 @@
 class howToGo {
     int boardWidth;
     int boardHeight;
-    vector<vector<char>> board;
+//    vector<vector<char>> board;
+    char *board;
     bool *visitedTiles;
     graph graph;
 

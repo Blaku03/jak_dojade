@@ -101,6 +101,7 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
         return;
     }
 
+
     vector<int> originalPath;
     //do backtrack from destination to starting city
     int currentTraversalIndex = previousVertex[destinationCityIndex];
@@ -109,6 +110,7 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
         currentTraversalIndex = previousVertex[currentTraversalIndex];
     }
 
+//    return;
     //print original path
     for (int i = (int) originalPath.size() - 1; i >= 0; i--) {
         std::cout << vertices[originalPath[i]].name << " ";

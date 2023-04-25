@@ -13,6 +13,10 @@ int main() {
     //pierwsza droga jest najszybsza
     //uzywanie fgets zamiast cin do lotnisk
     //mapa bool zamiast char
+    //przejscie tablicy od konca
+    //krawedzie jako vektor nie lista
+
+    //tablica wczytywana jako string moze napewno jest to do ulepsznia
 
     return 0;
 }
