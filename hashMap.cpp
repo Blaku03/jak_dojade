@@ -12,14 +12,6 @@ unsigned int hashMap::hash(vstring key) const {
     return hash % sizeOfTable;
 }
 
-//void hashMap::insert(const vstring &key, int value) {
-//    numberOfElements++;
-//    unsigned int index = hash(key);
-//
-//    pair<vstring, int> newPair(key, value);
-//    mainTable.i_element(index, true).push_back(newPair);
-//}
-
 bool hashMap::insertIfNotExists(const my_stl::vstring &key, int value) {
     unsigned int index = hash(key);
 

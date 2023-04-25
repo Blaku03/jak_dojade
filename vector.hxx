@@ -4,8 +4,10 @@
 
 template<typename T>
 void my_stl::vector<T>::expand_twice_the_size() {
+    auto *temp = main_buffer;
     //Doubling the size of main buffer
     main_buffer = copy_array(main_buffer, current_size, true);
+    delete[] temp;
     current_size *= 2;
 }
 
@@ -36,6 +38,7 @@ void my_stl::vector<T>::copy_vector(const vector &user_vector) {
 
 template<typename T>
 void my_stl::vector<T>::move_vector(vector &&user_vector) noexcept {
+    delete[] main_buffer;
     main_buffer = user_vector.main_buffer;
     user_vector.main_buffer = nullptr;
     number_of_elements = user_vector.number_of_elements;
