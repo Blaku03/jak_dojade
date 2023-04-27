@@ -36,6 +36,8 @@ namespace my_stl {
         using vector<char>::operator+=;
         using vector<char>::operator==;
 
+        void read_string_input();
+
         friend std::istream &operator>>(std::istream &is, vstring &vstring);
 
         friend std::ostream &operator<<(std::ostream &os, const vstring &vstring);

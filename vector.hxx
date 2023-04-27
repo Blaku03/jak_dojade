@@ -49,7 +49,7 @@ void my_stl::vector<T>::move_vector(vector &&user_vector) noexcept {
 
 template<typename T>
 my_stl::vector<T>::vector() {
-    current_size = 1;
+    current_size = 11;
     main_buffer = new T[current_size];
     number_of_elements = 0;
 }

@@ -67,7 +67,7 @@ public:
 
     void addEdge(edge &newEdge);
 
-    void printEdges() const;
+//    void printEdges() const;
 
 };
 
@@ -84,7 +84,7 @@ public:
 
     void findShortestPath(const vstring &startingCity, const vstring &destinationCity, int option);
 
-    void printGraph();
+//    void printGraph();
 
 };
 

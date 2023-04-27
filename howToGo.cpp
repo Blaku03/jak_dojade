@@ -35,8 +35,8 @@ void howToGo::start() {
     readBoard();
     traverseBoard();
     readAirports();
-//    findPaths();
-    graph.printGraph();
+    findPaths();
+//    graph.printGraph();
     delete[] board;
 }
 
@@ -78,14 +78,15 @@ void howToGo::readBoard() {
 
 void howToGo::readAirports() {
     int numberOfAirports;
-//    std::cin >> numberOfAirports;
     scanf("%d", &numberOfAirports);
 
     vstring airportNameDestination, airportNameSource;
     int length;
 
     for (int i = 0; i < numberOfAirports; i++) {
-        std::cin >> airportNameSource >> airportNameDestination;
+//        std::cin >> airportNameSource >> airportNameDestination;
+        airportNameSource.read_string_input();
+        airportNameDestination.read_string_input();
         scanf("%d", &length);
         graph.addEdge(airportNameSource, airportNameDestination, length);
     }
@@ -223,9 +224,10 @@ void howToGo::findPaths() {
     scanf("%d", &numberOfPaths);
     int option;
 
+    vstring startingCity, destinationCity;
     for (int i = 0; i < numberOfPaths; i++) {
-        vstring startingCity, destinationCity;
-        std::cin >> startingCity >> destinationCity;
+        startingCity.read_string_input();
+        destinationCity.read_string_input();
         scanf("%d", &option);
         graph.findShortestPath(startingCity, destinationCity, option);
     }

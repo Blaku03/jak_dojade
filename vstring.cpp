@@ -86,6 +86,28 @@ void my_stl::vstring::add_fgets(const char *read_fget) {
     *(main_buffer + number_of_elements) = '\0';
 }
 
+void my_stl::vstring::read_string_input() {
+
+    clear();
+
+    char readCharacter = (char) getchar();
+
+    while (readCharacter == '\n' || readCharacter == ' ' || (int) readCharacter == 13) {
+        readCharacter = (char) getchar();
+//        std::cout << (int) readCharacter << " p ";
+    }
+
+    while (true) {
+        if (readCharacter == '\n' || readCharacter == ' ' || (int) readCharacter == 13) {
+            break;
+        }
+        push_back(readCharacter);
+        readCharacter = (char) getchar();
+    }
+
+    main_buffer[number_of_elements] = '\0';
+}
+
 namespace my_stl {
     std::istream &operator>>(std::istream &is, my_stl::vstring &vstring) {
         char user_input[1024];

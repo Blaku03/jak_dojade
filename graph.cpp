@@ -5,11 +5,11 @@ void vertex::addEdge(edge &newEdge) {
     edges.push_back(newEdge);
 }
 
-void vertex::printEdges() const {
-    for (int i = 0; i < edges.size(); i++) {
-        std::cout << edges[i].destination->name << " " << edges[i].length << " , ";
-    }
-}
+//void vertex::printEdges() const {
+//    for (int i = 0; i < edges.size(); i++) {
+////        std::cout << edges[i].destination->name << " " << edges[i].length << " , ";
+//    }
+//}
 
 void graph::addVertex(vstring name) {
 
@@ -24,20 +24,20 @@ void graph::addEdge(const vstring &source, const vstring &destination, int lengt
 
     edge newEdge;
     newEdge.length = length;
-    newEdge.source = &vertices[hashMap.get(source)];
-    newEdge.destination = &vertices[hashMap.get(destination)];
+    newEdge.sourceIndex = hashMap.get(source);
+    newEdge.destinationIndex = hashMap.get(destination);
 
-    newEdge.source->addEdge(newEdge);
+    vertices[newEdge.sourceIndex].addEdge(newEdge);
 }
 
-void graph::printGraph() {
-
-    for (int i = 0; i < vertices.size(); i++) {
-        std::cout << vertices[i].name << " | ";
-        vertices[i].printEdges();
-        std::cout << "\n";
-    }
-}
+//void graph::printGraph() {
+//
+//    for (int i = 0; i < vertices.size(); i++) {
+//        std::cout << vertices[i].name << " | ";
+//        vertices[i].printEdges();
+//        std::cout << "\n";
+//    }
+//}
 
 void graph::findShortestPath(const vstring &startingCity, const vstring &destinationCity, int option) {
 
@@ -78,7 +78,7 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
         for (int i = 0; i < vertices[currentVertex.first].edges.size(); i++) {
 
             int newDistance = distanceToVertex[currentVertex.first] + vertices[currentVertex.first].edges[i].length;
-            int indexDestinationEdge = hashMap.get(vertices[currentVertex.first].edges[i].destination->name);
+            int indexDestinationEdge = vertices[currentVertex.first].edges[i].destinationIndex;
 
             if (newDistance < distanceToVertex[indexDestinationEdge]) {
 
