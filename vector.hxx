@@ -8,12 +8,12 @@ void my_stl::vector<T>::expand_twice_the_size() {
     //Doubling the size of main buffer
     main_buffer = copy_array(main_buffer, current_size, true);
     delete[] temp;
-    current_size *= 2;
+    current_size *= 3;
 }
 
 template<typename T>
 T *my_stl::vector<T>::copy_array(T *pointer_to_array_that_should_be_copied, size_t size_of_array, bool double_size) {
-    T *copied_array = new T[double_size ? size_of_array * 2 : size_of_array];
+    T *copied_array = new T[double_size ? size_of_array * 3 : size_of_array];
 
     for (unsigned int i = 0; i < size_of_array; i++) {
         *(copied_array + i) = std::move(*(pointer_to_array_that_should_be_copied + i));

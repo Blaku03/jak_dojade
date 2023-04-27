@@ -5,12 +5,6 @@ void vertex::addEdge(edge &newEdge) {
     edges.push_back(newEdge);
 }
 
-//void vertex::printEdges() const {
-//    for (int i = 0; i < edges.size(); i++) {
-////        std::cout << edges[i].destination->name << " " << edges[i].length << " , ";
-//    }
-//}
-
 void graph::addVertex(vstring name) {
 
     if (!hashMap.insertIfNotExists(name, (int) vertices.size())) return;
@@ -29,15 +23,6 @@ void graph::addEdge(const vstring &source, const vstring &destination, int lengt
 
     vertices[newEdge.sourceIndex].addEdge(newEdge);
 }
-
-//void graph::printGraph() {
-//
-//    for (int i = 0; i < vertices.size(); i++) {
-//        std::cout << vertices[i].name << " | ";
-//        vertices[i].printEdges();
-//        std::cout << "\n";
-//    }
-//}
 
 void graph::findShortestPath(const vstring &startingCity, const vstring &destinationCity, int option) {
 
@@ -111,7 +96,6 @@ void graph::findShortestPath(const vstring &startingCity, const vstring &destina
         currentTraversalIndex = previousVertex[currentTraversalIndex];
     }
 
-//    return;
     for (int i = (int) originalPath.size() - 1; i >= 0; i--) {
         std::cout << vertices[originalPath[i]].name << " ";
     }

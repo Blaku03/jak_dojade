@@ -3,40 +3,10 @@
 
 void howToGo::start() {
 
-    //DEBUG
-//    std::cout << "Reading board:";
-//    auto start = std::chrono::steady_clock::now();
-//    readBoard();
-//    auto end = std::chrono::steady_clock::now();
-//    std::cout << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
-//
-//    std::cout << "Traversing board:";
-//    start = std::chrono::steady_clock::now();
-//    traverseBoard();
-//    end = std::chrono::steady_clock::now();
-//    std::cout << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
-//
-//    std::cout << "Reading airports:";
-//    start = std::chrono::steady_clock::now();
-//    readAirports();
-//    end = std::chrono::steady_clock::now();
-//    std::cout << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
-//
-//    start = std::chrono::steady_clock::now();
-////    findPaths();
-//    std::cout << "Finding paths:";
-//    end = std::chrono::steady_clock::now();
-//    std::cout << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
-
-//    printCities();
-//    printBoard();
-
-//main
     readBoard();
     traverseBoard();
     readAirports();
     findPaths();
-//    graph.printGraph();
     delete[] board;
 }
 

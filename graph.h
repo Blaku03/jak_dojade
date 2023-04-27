@@ -19,30 +19,14 @@ class edge {
 public:
 
     int length = 0;
-//    vertex *destination = nullptr;
-//    vertex *source = nullptr;
     int destinationIndex = -1;
     int sourceIndex = -1;
 
-//    edge(vertex *source, vertex *destination, int length) : source(source), destination(destination),
-//                                                            length(length) {}
     edge(int sourceIndex, int destinationIndex, int length) : sourceIndex(sourceIndex),
                                                               destinationIndex(destinationIndex),
                                                               length(length) {}
 
     edge() = default;
-
-//    edge(edge &&other) noexcept: length(other.length), destination(other.destination), source(other.source) {}
-//
-//    edge &operator=(const edge &other) {
-//        if (this != &other) {
-//            length = other.length;
-//            destination = other.destination;
-//            source = other.source;
-//        }
-//        return *this;
-//    }
-
 };
 
 class vertex {
@@ -67,8 +51,6 @@ public:
 
     void addEdge(edge &newEdge);
 
-//    void printEdges() const;
-
 };
 
 class graph {
@@ -83,8 +65,6 @@ public:
     void addEdge(const vstring &source, const vstring &destination, int length);
 
     void findShortestPath(const vstring &startingCity, const vstring &destinationCity, int option);
-
-//    void printGraph();
 
 };
 
