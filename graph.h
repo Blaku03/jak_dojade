@@ -19,13 +19,30 @@ class edge {
 public:
 
     int length = 0;
-    vertex *destination = nullptr;
-    vertex *source = nullptr;
+//    vertex *destination = nullptr;
+//    vertex *source = nullptr;
+    int destinationIndex = -1;
+    int sourceIndex = -1;
 
-    edge(vertex *source, vertex *destination, int length) : source(source), destination(destination),
-                                                            length(length) {}
+//    edge(vertex *source, vertex *destination, int length) : source(source), destination(destination),
+//                                                            length(length) {}
+    edge(int sourceIndex, int destinationIndex, int length) : sourceIndex(sourceIndex),
+                                                              destinationIndex(destinationIndex),
+                                                              length(length) {}
 
     edge() = default;
+
+//    edge(edge &&other) noexcept: length(other.length), destination(other.destination), source(other.source) {}
+//
+//    edge &operator=(const edge &other) {
+//        if (this != &other) {
+//            length = other.length;
+//            destination = other.destination;
+//            source = other.source;
+//        }
+//        return *this;
+//    }
+
 };
 
 class vertex {
@@ -37,6 +54,16 @@ public:
     vertex() = default;
 
     explicit vertex(vstring name) : name(std::move(name)) {}
+
+    vertex(vertex &&other) noexcept: name(std::move(other.name)), edges(std::move(other.edges)) {}
+
+    vertex &operator=(const vertex &other) {
+        if (this != &other) {
+            name = other.name;
+            edges = other.edges;
+        }
+        return *this;
+    }
 
     void addEdge(edge &newEdge);
 

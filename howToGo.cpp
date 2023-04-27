@@ -23,7 +23,7 @@ void howToGo::start() {
 //    std::cout << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 //
 //    start = std::chrono::steady_clock::now();
-//    findPaths();
+////    findPaths();
 //    std::cout << "Finding paths:";
 //    end = std::chrono::steady_clock::now();
 //    std::cout << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
@@ -34,10 +34,10 @@ void howToGo::start() {
 //main
     readBoard();
     traverseBoard();
-    delete[] board;
     readAirports();
-    findPaths();
-//    graph.printGraph();
+//    findPaths();
+    graph.printGraph();
+    delete[] board;
 }
 
 bool howToGo::isLetter(char character) {

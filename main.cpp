@@ -1,11 +1,11 @@
 #include "howToGo.h"
 
 int main() {
-
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    std::cout.tie(nullptr);
-
+//
+//    std::ios_base::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
     howToGo arrive;
     arrive.start();
 
@@ -17,6 +17,7 @@ int main() {
     //krawedzie jako vektor nie lista
 
     //tablica wczytywana jako string moze napewno jest to do ulepsznia
+
 
     return 0;
 }
